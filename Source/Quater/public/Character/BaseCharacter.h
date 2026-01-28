@@ -22,6 +22,7 @@ class QUATER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterf
 public:
 	// Sets default values for this character's properties
 	ABaseCharacter();
+
     // --- [1] GAS Components ---
         // VisibleAnywhere: 블루프린트에서 확인 가능, TObjectPtr: UE5 스마트 포인터
     UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAS")
