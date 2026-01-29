@@ -14,6 +14,9 @@
 // 델리게이트: 캐릭터 사망 시 GameMode나 풀링 시스템에 알림
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCharacterDiedDelegate, ABaseCharacter*, DeadCharacter);
 
+class UBaseAttributeSet;
+class UAbilitySystemComponent;
+
 UCLASS()
 class QUATER_API ABaseCharacter : public ACharacter, public IAbilitySystemInterface
 {
