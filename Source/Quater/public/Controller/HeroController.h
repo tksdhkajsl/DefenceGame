@@ -3,16 +3,14 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Templates/SubclassOf.h"
 #include "GameFramework/PlayerController.h"
-#include "QuaterPlayerController.generated.h"
+#include "HeroController.generated.h"
 
 /** Forward declaration to improve compiling times */
-class UNiagaraSystem;
 class UInputMappingContext;
 class UInputAction;
 
-DECLARE_LOG_CATEGORY_EXTERN(LogTemplateCharacter, Log, All);
+
 
 UCLASS()
 class AHeroController : public APlayerController
@@ -22,47 +20,20 @@ class AHeroController : public APlayerController
 public:
 	AHeroController();
 
-	/** Time Threshold to know if it was a short press */
+	// 입력 매핑 컨텍스트 (IMC_Default)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	float ShortPressThreshold;
+	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
-	/** FX Class that we will spawn when clicking */
+	// 스킬 입력 액션 (IA_Skill1)
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
-	UNiagaraSystem* FXCursor;
-
-	/** MappingContext */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputMappingContext* DefaultMappingContext;
-	
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationClickAction;
-
-	/** Jump Input Action */
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category=Input, meta=(AllowPrivateAccess = "true"))
-	UInputAction* SetDestinationTouchAction;
+	TObjectPtr<UInputAction> Skill1Action;
 
 protected:
-	/** True if the controlled character should navigate to the mouse cursor. */
-	uint32 bMoveToMouseCursor : 1;
-
+	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;
-	
-	// To add mapping context
-	virtual void BeginPlay();
 
-	/** Input handlers for SetDestination action. */
-	void OnInputStarted();
-	void OnSetDestinationTriggered();
-	void OnSetDestinationReleased();
-	void OnTouchTriggered();
-	void OnTouchReleased();
-
-private:
-	FVector CachedDestination;
-
-	bool bIsTouch; // Is it a touch device
-	float FollowTime; // For how long it has been pressed
+	// 스킬 키 눌렀을 때 실행
+	void OnSkill1Triggered();
 
 
 };

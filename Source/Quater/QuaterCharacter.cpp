@@ -13,6 +13,7 @@
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
 
+
 AQuaterCharacter::AQuaterCharacter()
 {
 	// Set size for player capsule
@@ -79,6 +80,8 @@ void AQuaterCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputCom
 	}
 }
 
+
+
 void AQuaterCharacter::Move(const FInputActionValue& Value)
 {
 	// 입력값 가져오기 (Vector2D: X=Left/Right, Y=Forward/Back)
@@ -102,3 +105,4 @@ void AQuaterCharacter::Move(const FInputActionValue& Value)
 		AddMovementInput(RightDirection, MovementVector.X);
 	}
 }
+
