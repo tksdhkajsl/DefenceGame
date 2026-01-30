@@ -43,7 +43,7 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "GAS")
 	TObjectPtr<class UBaseAttributeSet> AttributeSet;
-
+public:
 	// --- [3] 게임 로직 ---
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Game")
 	ETeamType TeamID; // Player(아군 기지) vs Enemy(적군 기지)
