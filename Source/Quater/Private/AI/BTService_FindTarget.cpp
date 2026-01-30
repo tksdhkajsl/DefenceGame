@@ -6,6 +6,8 @@
 #include "Character/BaseCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Character/BaseCharacter.h"
+#include "Pawn/BaseStructure.h"
 
 UBTService_FindTarget::UBTService_FindTarget()
 {

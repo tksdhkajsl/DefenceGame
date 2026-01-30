@@ -6,6 +6,7 @@
 #include "Ability/BaseAttributeSet.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Pawn/BaseStructure.h"
 
 // Sets default values
 ABaseCharacter::ABaseCharacter()
@@ -108,6 +109,8 @@ void ABaseCharacter::OnHealthChanged(float NewHealth, float MaxHealth)
         Die();
     }
 }
+
+
 
 void ABaseCharacter::ActivateUnit()
 {

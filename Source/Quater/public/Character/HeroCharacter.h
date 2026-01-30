@@ -23,14 +23,14 @@ public:
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
 	// --- [1] 카메라 및 시점 ---
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	TObjectPtr<USpringArmComponent> CameraBoom;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Camera")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")
 	TObjectPtr<UCameraComponent> FollowCamera;
 
 	// --- [2] 입력 액션 (WASD 이동용) ---
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category= "Input")
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category= "Input")
 	TObjectPtr<UInputAction> MoveAction;
 
 	// --- [3] 자동 전투 설정 ---

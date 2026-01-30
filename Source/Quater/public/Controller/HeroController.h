@@ -21,11 +21,11 @@ public:
 	AHeroController();
 
 	// 입력 매핑 컨텍스트 (IMC_Default)
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputMappingContext> DefaultMappingContext;
 
 	// 스킬 입력 액션 (IA_Skill1)
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputAction> Skill1Action;
 
 protected:
