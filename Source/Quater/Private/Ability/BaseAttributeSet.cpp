@@ -75,7 +75,7 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
             }
 
             // (선택) UI용 데미지 텍스트 띄우기 요청 (Broadcast)
-            // 100마리 단위 게임에서는 액터 스폰 대신 가벼운 UI 이벤트를 권장
+            // 대규모 단위 게임에서는 액터 스폰 대신 가벼운 UI 이벤트를 권장
         }
     }
     // 2. 이동 속도 변경 처리 (슬로우, 헤이스트 버프 등)

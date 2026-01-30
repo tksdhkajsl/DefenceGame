@@ -8,6 +8,7 @@
 UGA_Attack::UGA_Attack()
 {
 	// (InstancedPerActor)으로 설정해야 몽타주 태스크가 안전함
+	// 검색 결과 게임 최적화 기능 향상에 많이 사용된다고 확인.
 	InstancingPolicy = EGameplayAbilityInstancingPolicy::InstancedPerActor;
 }
 
@@ -30,7 +31,7 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 	);
 
 	//콜백 함수 연결
-	// K2_EndAbility 대신 우리가 만든 OnMontageEnded를 연결해야 함
+	//OnMontageEnded를 연결해야 함
 	if (Task)
 	{
 		Task->OnBlendOut.AddDynamic(this, &UGA_Attack::OnMontageEnded);

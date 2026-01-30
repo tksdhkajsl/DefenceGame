@@ -55,6 +55,7 @@ void AMainAIController::OnUnPossess()
     if (BlackboardComp)
     {
         // ▼▼▼ [수정] 이 줄을 삭제하세요. (존재하지 않는 함수) ▼▼▼
+        // AI검수 결과 불필요 라는데. 혹시몰라 남겨둠. 풀링 시스템 꼬임방지 방어 코드
         // BlackboardComp->ClearAllKeyValues(); 
     }
 

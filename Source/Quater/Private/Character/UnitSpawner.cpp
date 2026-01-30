@@ -36,7 +36,7 @@ void AUnitSpawner::SpawnUnit()
 	ABaseGameMode* GM = Cast<ABaseGameMode>(UGameplayStatics::GetGameMode(this));
 	if (!GM) return;
 
-	// 3. [핵심] 인구수 제한 체크 (꽉 찼으면 스폰 취소)
+	// 3. 인구수 제한 체크 (꽉 찼으면 스폰 취소)
 	if (!GM->CanSpawnUnit(SpawnTeamID))
 	{
 		// UE_LOG(LogTemp, Warning, TEXT("Spawn Failed: Population Full!"));
@@ -59,7 +59,7 @@ void AUnitSpawner::SpawnUnit()
 		NewUnit->TeamID = SpawnTeamID; // 팀 설정
 		NewUnit->ActivateUnit();       // GAS 초기화 및 AI 가동 (필수!)
 
-		// 6. [핵심] 게임모드에 등록 (인구수 카운트 +1)
+		// 6. 게임모드에 등록 (인구수 카운트 +1)
 		GM->RegisterUnit(SpawnTeamID);
 	}
 }

@@ -28,6 +28,8 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Input")
 	TObjectPtr<UInputAction> Skill1Action;
 
+	
+
 protected:
 	virtual void BeginPlay() override;
 	virtual void SetupInputComponent() override;

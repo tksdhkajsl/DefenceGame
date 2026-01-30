@@ -21,7 +21,7 @@ AUnitCharacter::AUnitCharacter()
         GetCharacterMovement()->bOrientRotationToMovement = true;
     }
 
-    // AI는 카메라 회전을 따르지 않음
+    // AI는 카메라 회전 불필요
     bUseControllerRotationYaw = false;
 }
 
@@ -40,7 +40,7 @@ void AUnitCharacter::ActivateUnit()
     {
         AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
-        // [수정 3] 중복 부여 방지를 위해 기존 효과 정리 후 다시 부여
+        // 중복 부여 방지를 위해 기존 효과 정리 후 다시 부여
         AbilitySystemComponent->CancelAllAbilities();
         InitializeAttributes();   // 스탯 리셋
         GiveStartupAbilities();   // 스킬 다시 부여

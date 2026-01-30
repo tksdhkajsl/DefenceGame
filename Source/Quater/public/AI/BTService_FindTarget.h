@@ -21,9 +21,9 @@ protected:
 	// 0.5초 등 주기마다 실행될 로직
 	virtual void TickNode(UBehaviorTreeComponent& OwnerComp, uint8* NodeMemory, float DeltaSeconds) override;
 
-	UPROPERTY(EditAnywhere, Category = "AI")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "AI")
 	float DetectRange = 800.0f; // 탐색 범위
 
-	UPROPERTY(EditAnywhere, Category = "AI")
+	UPROPERTY(EditAnywhere,BlueprintReadWrite, Category = "AI")
 	FBlackboardKeySelector TargetKey; // 결과를 저장할 블랙보드 키 (TargetActor)
 };
