@@ -6,7 +6,6 @@
 #include "Character/BaseCharacter.h"
 #include "BehaviorTree/BlackboardComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
-#include "Character/BaseCharacter.h"
 #include "Pawn/BaseStructure.h"
 #include "Data/GameDataTypes.h"
 
