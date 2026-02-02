@@ -40,4 +40,8 @@ protected:
 	//몽타주 종료 시 호출될 콜백 함수
 	UFUNCTION()
 	void OnMontageEnded();
+
+	// 애니메이션에서 "Hit" 이벤트를 보냈을 때 실행할 함수
+	UFUNCTION()
+	void OnHitEventReceived(FGameplayEventData Payload);
 };
