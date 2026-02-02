@@ -7,6 +7,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
+#include "Data/UnitData.h"
 
 AUnitCharacter::AUnitCharacter()
 {
@@ -27,32 +28,41 @@ AUnitCharacter::AUnitCharacter()
 
 void AUnitCharacter::BeginPlay()
 {
-
+    Super::BeginPlay();
+    // 배치된 유닛의 경우 BeginPlay에서도 초기화 시도
+    if (UnitData)
+    {
+        InitUnitByData();
+    }
 }
+
 
 void AUnitCharacter::ActivateUnit()
 {
-    // 1. 부모 클래스 로직 (HP 리셋, 물리 켜기, 사망 태그 제거)
+    // 1. 데이터 기반 초기화 (가장 먼저 실행)
+    if (UnitData)
+    {
+        InitUnitByData();
+    }
+
+    // 2. 부모 클래스 로직 (HP 리셋 등)
     Super::ActivateUnit();
 
-    // 2. GAS 초기화 (유닛은 Owner와 Avatar가 모두 자신)
+    // 3. GAS 초기화
     if (AbilitySystemComponent)
     {
         AbilitySystemComponent->InitAbilityActorInfo(this, this);
 
-        // 중복 부여 방지를 위해 기존 효과 정리 후 다시 부여
+        // 기존 효과 정리 후 스탯/스킬 다시 부여
         AbilitySystemComponent->CancelAllAbilities();
-        InitializeAttributes();   // 스탯 리셋
-        GiveStartupAbilities();   // 스킬 다시 부여
+        InitializeAttributes();
+        GiveStartupAbilities();
     }
 
-    // 3. AI 재가동
-    // GetController()는 AController*를 반환하므로 캐스팅 필요
+    // 4. AI 재가동
     AMainAIController* AICon = Cast<AMainAIController>(GetController());
-
     if (AICon && DefaultBehaviorTree)
     {
-        // 블랙보드 초기화 및 트리 실행
         if (DefaultBehaviorTree->BlackboardAsset)
         {
             AICon->GetBlackboardComponent()->InitializeBlackboard(*DefaultBehaviorTree->BlackboardAsset);
@@ -86,3 +96,39 @@ void AUnitCharacter::DeactivateUnit()
     Super::DeactivateUnit();
 }
 
+
+void AUnitCharacter::InitUnitByData()
+{
+    if (!UnitData) return;
+
+    // 1. 외형 변경 (메쉬)
+    if (UnitData->SkeletalMesh)
+    {
+        GetMesh()->SetSkeletalMesh(UnitData->SkeletalMesh);
+    }
+
+    // 2. 애니메이션 변경
+    if (UnitData->AnimBlueprint)
+    {
+        GetMesh()->SetAnimInstanceClass(UnitData->AnimBlueprint);
+    }
+
+    // 3. 이동 속도 설정
+    GetCharacterMovement()->MaxWalkSpeed = UnitData->MoveSpeed;
+
+    // 4. 공격 사거리 설정 (AI 감지 범위 등으로 활용 가능)
+    // AttackRange = UnitData->AttackRange; (BaseCharacter에 변수가 있다면)
+
+    // 5. 투사체 클래스 설정 (원거리/근거리 구분용)
+    // BaseCharacter.h에 추가한 ProjectileClass 변수에 값을 넣어줌
+    this->ProjectileClass = UnitData->ProjectileClass;
+
+    // 6. 스탯 적용 (AttributeSet 값 덮어쓰기)
+    if (AttributeSet)
+    {
+        // Init 수동 설정 (또는 GE_InitStats를 동적으로 생성해서 적용해도 됨)
+        AttributeSet->InitMaxHealth(UnitData->MaxHealth);
+        AttributeSet->InitHealth(UnitData->MaxHealth);
+        AttributeSet->InitAttackPower(UnitData->AttackDamage);
+    }
+}

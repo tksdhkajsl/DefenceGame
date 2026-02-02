@@ -5,6 +5,7 @@
 #include "AIController.h"
 #include "Character/BaseCharacter.h"
 #include"AbilitySystemComponent.h"
+#include "Mode/BaseGameplayTags.h"
 
 UBTTask_Attack::UBTTask_Attack()
 {
@@ -23,7 +24,7 @@ EBTNodeResult::Type UBTTask_Attack::ExecuteTask(UBehaviorTreeComponent& OwnerCom
 
 		// "Ability.Action.Attack" 태그를 가진 어빌리티 발동 시도
 		FGameplayTagContainer TagContainer;
-		TagContainer.AddTag(FGameplayTag::RequestGameplayTag(FName("Ability.Action.Attack")));
+		TagContainer.AddTag(FBaseGameplayTags::Get().Ability_Action_Attack);
 
 		if (ASC->TryActivateAbilitiesByTag(TagContainer))
 		{

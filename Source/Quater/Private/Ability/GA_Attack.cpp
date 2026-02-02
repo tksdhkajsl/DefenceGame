@@ -2,9 +2,13 @@
 
 
 #include "Ability/GA_Attack.h"
-#include "Character/BaseCharacter.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "AbilitySystemBlueprintLibrary.h"
+#include "AbilitySystemComponent.h"
+#include "Actor/ProjectileActor.h"
+#include "Character/BaseCharacter.h"
+#include "Kismet/KismetSystemLibrary.h" 
 #include "Mode/BaseGameplayTags.h"
 
 UGA_Attack::UGA_Attack()
@@ -78,11 +82,72 @@ void UGA_Attack::OnHitEventReceived(FGameplayEventData Payload)
 	// Payload.TargetData에 맞은 적의 정보가 들어옴 (Montage Notify에서 설정 필요)
 	// 만약 Notify가 타겟 정보를 안 주면, 여기서 SphereOverlap 등으로 직접 찾아야 함.
 
-	// 일단 간단하게 "내 주변 적"에게 데미지를 주는 방식 (광역 평타) 예시:
-	/*
-	if (DamageEffectClass)
-	{
-		// 여기서 OverlapCheck로 적을 찾아서 ApplyGameplayEffectToTarget 호출
-	}
-	*/
+    AActor* AvatarActor = GetAvatarActorFromActorInfo();
+    ABaseCharacter* OwnerCharacter = Cast<ABaseCharacter>(AvatarActor);
+    if (!OwnerCharacter) return;
+
+    // 투사체(Projectile)가 있는 유닛 -> 원거리 공격
+    if (OwnerCharacter->ProjectileClass)
+    {
+        FVector SpawnLoc = OwnerCharacter->GetActorLocation();
+        FRotator SpawnRot = OwnerCharacter->GetActorRotation();
+
+        // 소켓 위치 사용 (없으면 앞쪽)
+        if (OwnerCharacter->GetMesh()->DoesSocketExist(FName("Muzzle_01")))
+        {
+            SpawnLoc = OwnerCharacter->GetMesh()->GetSocketLocation(FName("Muzzle_01"));
+        }
+        else
+        {
+            SpawnLoc += (OwnerCharacter->GetActorForwardVector() * 50.0f) + FVector(0, 0, 50);
+        }
+
+        FActorSpawnParameters Params;
+        Params.Owner = OwnerCharacter;
+        Params.Instigator = OwnerCharacter;
+        Params.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+
+        AProjectileActor* Projectile = GetWorld()->SpawnActor<AProjectileActor>(
+            OwnerCharacter->ProjectileClass, SpawnLoc, SpawnRot, Params);
+
+        if (Projectile)
+        {
+            Projectile->DamageEffectClass = this->DamageEffectClass;
+            Projectile->MyTeamID = (uint8)OwnerCharacter->TeamID;
+        }
+    }
+    //  투사체가 없는 유닛 -> 근접(즉발) 공격
+    else
+    {
+        TArray<AActor*> OverlappedActors;
+        TArray<TEnumAsByte<EObjectTypeQuery>> ObjectTypes;
+        ObjectTypes.Add(UEngineTypes::ConvertToObjectType(ECollisionChannel::ECC_Pawn));
+        TArray<AActor*> IgnoreActors;
+        IgnoreActors.Add(OwnerCharacter);
+
+        // 내 주변 150cm 검색
+        UKismetSystemLibrary::SphereOverlapActors(GetWorld(), OwnerCharacter->GetActorLocation(), 150.0f, ObjectTypes, APawn::StaticClass(), IgnoreActors, OverlappedActors);
+
+        for (AActor* HitActor : OverlappedActors)
+        {
+            ABaseCharacter* TargetChar = Cast<ABaseCharacter>(HitActor);
+            // 적군 판별
+            if (TargetChar && TargetChar->TeamID != OwnerCharacter->TeamID && !TargetChar->IsDead())
+            {
+                UAbilitySystemComponent* SourceASC = GetAbilitySystemComponentFromActorInfo();
+                UAbilitySystemComponent* TargetASC = UAbilitySystemBlueprintLibrary::GetAbilitySystemComponent(TargetChar);
+
+                if (SourceASC && TargetASC && DamageEffectClass)
+                {
+                    FGameplayEffectContextHandle Context = SourceASC->MakeEffectContext();
+                    Context.AddInstigator(OwnerCharacter, OwnerCharacter);
+                    FGameplayEffectSpecHandle SpecHandle = SourceASC->MakeOutgoingSpec(DamageEffectClass, 1.0f, Context);
+                    if (SpecHandle.IsValid())
+                    {
+                        SourceASC->ApplyGameplayEffectSpecToTarget(*SpecHandle.Data.Get(), TargetASC);
+                    }
+                }
+            }
+        }
+    }
 }

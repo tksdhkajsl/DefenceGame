@@ -45,6 +45,14 @@ public:
     UPROPERTY(BlueprintAssignable, Category = "Combat")
     FOnCharacterDiedDelegate OnCharacterDied;
 
+    // 발사체 클래스 (이게 설정되어 있으면 원거리, 없으면 근접)
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+    TSubclassOf<class AProjectileActor> ProjectileClass;
+
+    // 발사 위치 소켓 이름 (예: "Muzzle_01", 근접은 "Weapon_Tip")
+    UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Combat")
+
+    FName AttackSocketName = FName("Muzzle_01");
     // --- [3] 인터페이스 구현 ---
     virtual class UAbilitySystemComponent* GetAbilitySystemComponent() const override;
 
