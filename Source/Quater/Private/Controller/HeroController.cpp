@@ -5,6 +5,7 @@
 #include "AbilitySystemComponent.h"
 #include "AbilitySystemInterface.h"
 #include "GameplayTagContainer.h"
+#include "Mode/BaseGameplayTags.h"
 
 AHeroController::AHeroController()
 {
@@ -56,7 +57,7 @@ void AHeroController::OnSkill1Triggered()
 			UAbilitySystemComponent* ASC = ASCInterface->GetAbilitySystemComponent();
 			if (ASC)
 			{
-				FGameplayTag SkillTag = FGameplayTag::RequestGameplayTag(FName("Ability.Action.Skill1"));
+				FGameplayTag SkillTag = FBaseGameplayTags::Get().Ability_Action_Skill1;
 				ASC->TryActivateAbilitiesByTag(FGameplayTagContainer(SkillTag));
 			}
 		}

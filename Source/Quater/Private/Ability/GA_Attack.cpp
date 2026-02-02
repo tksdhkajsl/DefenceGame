@@ -5,6 +5,7 @@
 #include "Character/BaseCharacter.h"
 #include "Abilities/Tasks/AbilityTask_PlayMontageAndWait.h"
 #include "Abilities/Tasks/AbilityTask_WaitGameplayEvent.h"
+#include "Mode/BaseGameplayTags.h"
 
 UGA_Attack::UGA_Attack()
 {
@@ -45,7 +46,7 @@ void UGA_Attack::ActivateAbility(const FGameplayAbilitySpecHandle Handle, const 
 
 	// 4. 데미지 타이밍 기다리기 (Wait Gameplay Event)
 	// 애니메이션 노티파이에서 'Event.Combat.Hit' 태그를 보내면 이 태스크가 반응함
-	FGameplayTag HitTag = FGameplayTag::RequestGameplayTag(FName("Event.Combat.Hit"));
+	FGameplayTag HitTag = FBaseGameplayTags::Get().Event_Combat_Hit;
 
 	UAbilityTask_WaitGameplayEvent* WaitTask = UAbilityTask_WaitGameplayEvent::WaitGameplayEvent(
 		this,

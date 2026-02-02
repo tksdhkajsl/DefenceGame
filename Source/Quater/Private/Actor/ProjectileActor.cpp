@@ -31,15 +31,22 @@ AProjectileActor::AProjectileActor()
     MovementComp->MaxSpeed = 1000.0f;
     MovementComp->ProjectileGravityScale = 0.0f; // 중력 영향 없음 (직사)
 
+    //4. 유도 미사일 설정
+    MovementComp->bIsHomingProjectile = true; // 유도 활성화
+    MovementComp->HomingAccelerationMagnitude = 10000.0f; // 유도 성능 (클수록 급격하게 꺾임)
+
     // 수명 (3초 뒤 자동 삭제)
     InitialLifeSpan = 3.0f;
 }
 
-
+// 발사 후 타겟 지정 필요
 void AProjectileActor::BeginPlay()
 {
 	Super::BeginPlay();
 	
+    // 타겟을 향해 날아가도록 설정 (주인이 타겟 정보를 넘겨줘야 함)
+    // 이 부분은 생성 후 SetHomingTargetComponent를 호출해야 하므로 캐릭터 쪽에서 구현해야 함.
+    
 }
 
 void AProjectileActor::OnOverlapBegin(UPrimitiveComponent* OverlappedComp, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
