@@ -90,6 +90,7 @@ void ABaseCharacter::Die()
     // 4. 래그돌 처리 (선택)
     GetMesh()->SetSimulatePhysics(true);
     GetMesh()->SetCollisionProfileName(TEXT("Ragdoll"));
+    SetLifeSpan(5.0f);
 }
 
 bool ABaseCharacter::IsDead() const
