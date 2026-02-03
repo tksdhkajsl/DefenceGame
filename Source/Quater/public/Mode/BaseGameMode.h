@@ -36,14 +36,25 @@ public:
 	void RegisterUnit(ETeamType Team);
 	void UnregisterUnit(ETeamType Team);
 
-	// --- [2] 승패 판정 로직 ---
+	
 public:
+	// --- [2] 승패 판정 로직 ---
 	// 기지가 파괴되었을 때 호출되는 함수
 	void OnGameOver(ETeamType DefeatedTeam);
+
+	// 영웅 사망 시 호출될 함수
+	void OnHeroDied(AController* HeroController);
 
 protected:
 	// 게임 종료 상태 플래그 (중복 호출 방지)
 	bool bIsGameOver = false;
+
+	// 리스폰 타이머 처리 함수
+	void RespawnHero(AController* HeroController);
+
+	// 리스폰 대기 시간 (초)
+	UPROPERTY(EditDefaultsOnly, Category = "GameRule")
+	float HeroRespawnDelay = 50.0f;
 
 	// [BP 연동] 승리/패배 UI를 띄우기 위한 이벤트 함수
 	// C++에서 호출하면 블루프린트(BP_QuaterGameMode)에서 UI를 CreateWidget 하면 됨

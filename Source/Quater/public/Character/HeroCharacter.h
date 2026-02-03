@@ -21,6 +21,8 @@ public:
 
 	virtual void Tick(float DeltaTime) override;
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
+	// 부모 클래스의 Die 함수 재정의
+	virtual void Die() override;
 
 	// --- [1] 카메라 및 시점 ---
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category = "Camera")

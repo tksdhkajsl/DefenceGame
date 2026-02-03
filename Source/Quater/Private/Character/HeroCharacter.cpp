@@ -8,6 +8,8 @@
 #include "EnhancedInputComponent.h"
 #include "AbilitySystemComponent.h"
 #include "Kismet/KismetSystemLibrary.h"
+#include "Kismet/GameplayStatics.h"
+#include "Mode/BaseGameMode.h"
 #include "GameplayTagContainer.h"
 
 AHeroCharacter::AHeroCharacter()
@@ -159,3 +161,17 @@ void AHeroCharacter::ToggleAutoSkillMode()
 	bIsAutoSkillMode = !bIsAutoSkillMode;
 }
 
+void AHeroCharacter::Die()
+{
+	//1. 이미 사망 상태면 무시
+	if (IsDead()) return;
+
+	//2. 부모 클래스에서 사망 처리
+	Super::Die();
+
+	//3. 게임모드에 리스폰 요청
+	if (ABaseGameMode* GM = Cast<ABaseGameMode>(UGameplayStatics::GetGameMode(this)))
+	{
+		GM->OnHeroDied(GetController());
+	}
+}

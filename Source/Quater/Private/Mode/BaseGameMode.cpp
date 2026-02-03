@@ -87,3 +87,31 @@ void ABaseGameMode::OnGameOver(ETeamType DefeatedTeam)
 		PC->bShowMouseCursor = true; // 결과창 클릭을 위해 커서는 보이게
 	}
 }
+
+void ABaseGameMode::OnHeroDied(AController* HeroController)
+{
+	if (!HeroController) return;
+
+	UE_LOG(LogTemp, Warning, TEXT("영웅 사망 리스폰 %f 초 남았음."), HeroRespawnDelay);
+
+	FTimerHandle RespawnTimerHandle;
+	FTimerDelegate RespawnDelegate = FTimerDelegate::CreateUObject(this, &ABaseGameMode::RespawnHero, HeroController);
+	GetWorldTimerManager().SetTimer(RespawnTimerHandle, RespawnDelegate, HeroRespawnDelay, false);
+}
+
+void ABaseGameMode::RespawnHero(AController* HeroController)
+{
+	if (HeroController)
+	{
+		// 이전에 조종하던 폰(시체)이 남아있다면 정리
+		if (APawn* OldPawn = HeroController->GetPawn())
+		{
+			OldPawn->Destroy();
+		}
+
+		// 플레이어 재시작 (PlayerStart 위치에서 스폰 및 빙의)
+		RestartPlayer(HeroController);
+
+		UE_LOG(LogTemp, Warning, TEXT("영웅 재소환!"));
+	}
+}
