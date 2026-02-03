@@ -19,7 +19,7 @@ class QUATER_API UUnitData : public UPrimaryDataAsset
 	
 public:
 	// --- [1] 기본 정보 ---
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Info")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Info")
 	FText UnitName;
 
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Info")
@@ -40,16 +40,16 @@ public:
 	UAnimMontage* AttackMontage;
 
 	// --- [3] 능력치 (GAS 초기화용) ---
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
 	float MaxHealth = 100.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
 	float AttackDamage = 10.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
 	float AttackRange = 150.0f;
 
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Stats")
+	UPROPERTY(EditDefaultsOnly, BlueprintReadWrite, Category = "Stats")
 	float MoveSpeed = 300.0f;
 
 	// 투사체 클래스 (원거리 유닛인 경우)
