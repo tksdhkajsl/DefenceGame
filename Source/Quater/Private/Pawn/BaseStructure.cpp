@@ -18,7 +18,7 @@ ABaseStructure::ABaseStructure()
 	// 1. 충돌체 설정 (유닛이 밀고 들어오지 못하게 BlockAll)
 	CapsuleComp = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleComp"));
 	SetRootComponent(CapsuleComp);
-	CapsuleComp->SetCollisionProfileName(TEXT("BlockAllDynamic"));
+	CapsuleComp->SetCollisionProfileName(TEXT("Pawn"));
 	CapsuleComp->SetCapsuleHalfHeight(200.0f);
 	CapsuleComp->SetCapsuleRadius(100.0f);
 

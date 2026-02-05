@@ -117,6 +117,8 @@ void ABaseCharacter::ActivateUnit()
 {
     // 풀링: 재사용될 때 상태 리셋
     GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+    GetCapsuleComponent()->SetCollisionProfileName(TEXT("Pawn"));
+
     GetMesh()->SetSimulatePhysics(false);
     GetMesh()->SetCollisionProfileName(TEXT("CharacterMesh"));
 
