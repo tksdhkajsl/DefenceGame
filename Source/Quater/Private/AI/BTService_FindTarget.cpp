@@ -29,6 +29,26 @@ void UBTService_FindTarget::TickNode(UBehaviorTreeComponent& OwnerComp, uint8* N
 	ABaseCharacter* MyChar = Cast<ABaseCharacter>(OwningPawn);
 	if (!MyChar) return;
 
+	UBlackboardComponent* BC = OwnerComp.GetBlackboardComponent();
+	if (!BC) return;
+
+	//타겟 고정(Target Locking) 로직
+	AActor* CurrentTarget = Cast<AActor>(BC->GetValueAsObject(TargetKey.SelectedKeyName));
+	
+	if (IsValid(CurrentTarget))
+	{
+		ABaseCharacter* TargetChar = Cast<ABaseCharacter>(CurrentTarget);
+		// 현재 타겟이 살아있고, 사거리(DetectRange) 안에 있다면 검색을 생략하고 유지함
+		if (TargetChar && !TargetChar->IsDead())
+		{
+			float DistSq = FVector::DistSquared(OwningPawn->GetActorLocation(), CurrentTarget->GetActorLocation());
+			if (DistSq <= FMath::Square(DetectRange))
+			{
+				return; // 기존 타겟 유지
+			}
+		}
+	}
+
 	ETeamType MyTeam = MyChar->TeamID;
 
 	// 2. 주변 모든 Pawn 검색
