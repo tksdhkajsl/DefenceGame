@@ -132,3 +132,15 @@ void AUnitCharacter::InitUnitByData()
         AttributeSet->InitAttackPower(UnitData->AttackDamage);
     }
 }
+
+AActor* AUnitCharacter::GetTargetEnemy()
+{
+    if (AAIController* AICon = Cast<AAIController>(GetController()))
+    {
+        if (UBlackboardComponent* BB = AICon->GetBlackboardComponent())
+        {
+            return Cast<AActor>(BB->GetValueAsObject("AttackTarget")); // 블랙보드 키 이름
+        }
+    }
+    return nullptr;
+}

@@ -1,0 +1,19 @@
+1. GE_Damage 만들기: "체력(Health)을 깎는다"는 파일 생성.
+
+2. 몽타주에 Notify 찍기: 칼이 닿는 프레임에 Event.Montage.Hit 태그 심기.
+
+	- 공격 몽타주(Pioneer_Base_Attack_Montage)를 열기
+
+	- 칼이 적을 베는 정확한 프레임에 우클릭 -> Add Notify -> Gameplay Event 를 추가합니다. (기본 제공되는 	 		   	AnimNotify_SendGameplayEvent 사용)
+
+	- 추가된 노티파이의 Details 패널에서 Payload -> Event Tag를 설정
+	태그: Event.Montage.Hit (없으면 GameplayTags 설정에서 새로 추가)
+
+
+3. BPGA_Attack 연결:
+
+GetTargetEnemy로 타겟을 가져오고,
+
+Wait Gameplay Event로 타이밍을 기다렸다가,
+
+Apply Gameplay Effect로 GE_Damage를 적용.

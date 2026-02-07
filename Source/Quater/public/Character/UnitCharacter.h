@@ -37,6 +37,9 @@ public:
 	// 풀로 돌아갈 때: AI 중지 + GAS 정리
 	virtual void DeactivateUnit() override;
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	AActor* GetTargetEnemy(); // 블랙보드에서 타겟을 가져오는 함수
+
 protected:
 	// 스폰 시 AI 컨트롤러 자동 빙의 설정
 	virtual void BeginPlay() override;
