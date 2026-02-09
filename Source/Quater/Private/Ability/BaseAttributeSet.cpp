@@ -7,6 +7,7 @@
 #include "GameFramework/Character.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Character/BaseCharacter.h"
+#include "Character/UnitCharacter.h"
 
 UBaseAttributeSet::UBaseAttributeSet()
 {
@@ -56,26 +57,23 @@ void UBaseAttributeSet::PostGameplayEffectExecute(const FGameplayEffectModCallba
     if (Data.EvaluatedData.Attribute == GetDamageAttribute())
     {
         const float LocalDamage = GetDamage();
-        SetDamage(0.0f); // 메타 속성은 사용 후 바로 초기화
+        SetDamage(0.0f);
 
         if (LocalDamage > 0.0f)
         {
-            // 실제 체력 깎기
             const float NewHealth = GetHealth() - LocalDamage;
             SetHealth(FMath::Clamp(NewHealth, 0.0f, GetMaxHealth()));
 
-            // 사망 체크
+            // 사망 체크 및 처리
             if (GetHealth() <= 0.0f)
             {
-                ABaseCharacter* TargetCharacter = Cast<ABaseCharacter>(TargetActor);
-                if (TargetCharacter)
+                // ABaseCharacter -> AUnitCharacter로 변경
+                AUnitCharacter* TargetUnit = Cast<AUnitCharacter>(TargetActor);
+                if (TargetUnit)
                 {
-                    TargetCharacter->Die(); // 사망 함수 호출
+                    TargetUnit->OnDeath(); // 우리가 만든 함수 호출
                 }
             }
-
-            // (선택) UI용 데미지 텍스트 띄우기 요청 (Broadcast)
-            // 대규모 단위 게임에서는 액터 스폰 대신 가벼운 UI 이벤트를 권장
         }
     }
     // 2. 이동 속도 변경 처리 (슬로우, 헤이스트 버프 등)

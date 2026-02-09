@@ -40,10 +40,20 @@ public:
 	// 풀로 돌아갈 때: AI 중지 + GAS 정리
 	virtual void DeactivateUnit() override;
 
+	// 사망 처리 함수 (C++에서 호출)
+	virtual void OnDeath();
+
+	// 사망 시 블루프린트에서 연출(랙돌 등)을 하기 위한 이벤트
+	UFUNCTION(BlueprintImplementableEvent, Category = "Combat")
+	void BP_OnDeath();
+
 protected:
 	// 스폰 시 AI 컨트롤러 자동 빙의 설정
 	virtual void BeginPlay() override;
 
 	// 데이터 에셋 내용을 실제 캐릭터에 적용하는 함수
 	virtual void InitUnitByData();
+
+	// 중복 사망 방지용 플래그
+	bool bIsDead = false;
 };

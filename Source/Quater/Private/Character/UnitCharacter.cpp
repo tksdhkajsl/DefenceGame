@@ -4,6 +4,7 @@
 #include "Character/UnitCharacter.h"
 #include "Ability/BaseAttributeSet.h"
 #include "Controller/MainAIController.h"
+#include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "BehaviorTree/BehaviorTree.h"
 #include "BehaviorTree/BlackboardComponent.h"
@@ -101,6 +102,28 @@ void AUnitCharacter::DeactivateUnit()
 
     // 3. 부모 클래스 정리 (콜리전 끄기 등)
     Super::DeactivateUnit();
+}
+
+void AUnitCharacter::OnDeath()
+{
+    if (bIsDead) return; // 이미 죽었으면 무시
+    bIsDead = true;
+
+    // 1. AI 컨트롤러 정지 (더 이상 추적/공격 안 함)
+    if (AController* MyController = GetController())
+    {
+        MyController->StopMovement();
+        MyController->UnPossess();
+    }
+
+    // 2. 캡슐 콜리전 끄기 (시체가 길을 막지 않게)
+    if (GetCapsuleComponent())
+    {
+        GetCapsuleComponent()->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+    }
+
+    // 3. 블루프린트 이벤트 호출 (여기서 랙돌 physics 켜기)
+    BP_OnDeath();
 }
 
 
