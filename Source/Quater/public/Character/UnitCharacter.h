@@ -30,6 +30,9 @@ public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "AI")
 	TObjectPtr<class UBehaviorTree> DefaultBehaviorTree;
 
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	AActor* GetTargetEnemy(); // 블랙보드에서 타겟을 가져오는 함수
+
 	// --- 3. 오브젝트 풀링 (BaseCharacter 오버라이드) ---
 	// 풀에서 꺼내질 때: GAS 초기화 + AI 재가동
 	virtual void ActivateUnit() override;

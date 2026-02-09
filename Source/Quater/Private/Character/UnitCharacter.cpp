@@ -29,11 +29,18 @@ AUnitCharacter::AUnitCharacter()
 void AUnitCharacter::BeginPlay()
 {
     Super::BeginPlay();
+
     // 배치된 유닛의 경우 BeginPlay에서도 초기화 시도
     if (UnitData)
     {
         InitUnitByData();
     }
+    //이 코드가 반드시 있어야 몽타주가 실행
+    if (AbilitySystemComponent)
+    {
+        AbilitySystemComponent->InitAbilityActorInfo(this, this);
+    }
+
 }
 
 
@@ -131,4 +138,16 @@ void AUnitCharacter::InitUnitByData()
         AttributeSet->InitHealth(UnitData->MaxHealth);
         AttributeSet->InitAttackPower(UnitData->AttackDamage);
     }
+}
+
+AActor* AUnitCharacter::GetTargetEnemy()
+{
+    if (AAIController* AICon = Cast<AAIController>(GetController()))
+    {
+        if (UBlackboardComponent* BB = AICon->GetBlackboardComponent())
+        {
+            return Cast<AActor>(BB->GetValueAsObject("TargetActor")); // 블랙보드 키 이름
+        }
+    }
+    return nullptr;
 }
